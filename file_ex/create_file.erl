@@ -16,4 +16,16 @@ open_file() ->
 read_file() ->
     file:read_file("foo.do").
 
-    
+open_file_read_line() ->
+    case file:open("foo.do",[read]) of
+        {ok, Device} ->
+            read_all_lines(Device);
+        {error, Reason} ->
+            io:format("~s~n",[Reason])
+    end.
+
+read_all_lines(IoDevice) ->
+    case io:get_line(IoDevice,"") of
+        eof -> [];
+        Line -> [Line | read_all_lines(IoDevice)]
+    end.
